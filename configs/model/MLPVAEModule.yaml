@@ -1,0 +1,28 @@
+_target_: src.models.mlp_module.MultiTaskMLPModule
+
+classifier:
+  _target_: src.models.components.multitask_mlp.MultiTaskMLP
+  shared_layer: True
+  input_dim: 128
+  hidden_dim: 256
+  num_classes: 6
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.0001
+  # weight_decay: 0.0
+
+scheduler: Null
+embedder_ckpt: Null
+embedder: "VGGish"
+# efficientnets
+# embedder_ckpt: '${paths.log_dir}vae_distillation/runs/efficientNetb0_89023/checkpoints/epoch_050.ckpt'
+# embedder: "Eff"
+
+# VAE
+# embedder_ckpt: ${paths.log_dir}train_vae_cyclic/runs/2023-08-19_20-45-27_89023/checkpoints/epoch_045.ckpt
+# embedder: "VAE"
+
+# embedder_ckpt: ${paths.log_dir}train_vggish/runs/2023-08-28_14-30-15_89023/checkpoints/last.ckpt
+# embedder: "VGGish"

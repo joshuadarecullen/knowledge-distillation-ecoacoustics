@@ -1,0 +1,11 @@
+umap_latent:
+  _target_: src.callbacks.umap_latent.UMAPLatent
+    #root: ${paths.data_dir}
+  save_path: Null
+  metric: 'euclidean'
+  min_distance:  0
+  num_neighbours: 50
+  seed: 0
+  num_components: 2
+  model_name: 'VAE'
+  cmap: 'rainbow'

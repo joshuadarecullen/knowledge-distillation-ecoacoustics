@@ -1,0 +1,69 @@
+
+# @package _global_
+# to execute this experiment run:
+# python train.py experiment=mlp_vggish
+
+defaults:
+  - override /data: equal_split.yaml
+  - override /model: MLPModule.yaml
+  - override /callbacks: mlp.yaml
+  - override /trainer: gpu.yaml
+  - override /logger: wandb.yaml # set logger here or use command line (e.g. `python train.py logger=tensorboard`)
+  - override /paths: default.yaml
+  - override /extras: default.yaml
+  - override /hydra: default.yaml
+
+
+model:
+  embedder: "VGGish"
+
+# task name, determines output directory path
+task_name: "train_mlpvggish"
+
+tags: ["dev", "Sussex Dataset", "VGGish", "One shared Layer"]
+
+# set False to skip model training
+train: True
+
+# evaluate on test set, using best model weights achieved during training
+# lightning chooses best weights based on the metric specified in checkpoint callback
+predict: False
+
+# compile model for faster training with pytorch 2.0
+compile: False
+
+# simply provide checkpoint path to resume training
+ckpt_path: null
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 89023
+
+data:
+  seed: ${seed}
+
+trainer:
+  min_epochs: 1
+  max_epochs: 150
+  # gradient_clip_val: 0.5
+  fast_dev_run: False
+  # num_sanity_val_steps: 0
+
+callbacks:
+  model_checkpoint:
+    monitor: "val/loss"
+    mode: "min"
+  early_stopping:
+    monitor: "val/loss"
+    patience: 10
+    mode: "min"
+
+logger:
+  wandb:
+    tags: ${tags}
+    group: "MultiTask MLP VGGish"
+  aim:
+    experiment: "ECOACOUSTICS MLP VGGish"
+
+hydra:
+  run:
+    dir: ${paths.log_dir}/${task_name}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}

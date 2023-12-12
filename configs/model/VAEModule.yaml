@@ -1,0 +1,38 @@
+_target_: src.models.VAEModule.VAEModule
+
+model:
+  _target_: src.models.components.VAE.VAE
+
+  encoder:
+    _target_: src.models.components.encoder.Encoder
+    # feature_layers: [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M']
+    vggish_pretrain: False
+    vggish_frozen: False
+    out_features: 128
+    negative_slope: 0.03
+    num_outputs: 2
+
+  decoder:
+    _target_: src.models.components.decoder.Decoder
+    in_features: 128
+    out_channels: 1 # 2 for sigma training
+    negative_slope: 0.03 # good run with 0.3
+
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.0001
+  # weight_decay: 0.0
+
+scheduler: Null
+
+kl_scheduler: Null
+
+train_sigma: False # true for sigma training
+
+state_dict: Null
+
+frozen: False
+
+
+

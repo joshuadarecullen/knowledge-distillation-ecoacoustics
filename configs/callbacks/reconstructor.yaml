@@ -1,0 +1,18 @@
+reconstructor:
+  _target_: src.callbacks.reconstruct.Reconstructor
+  frame:
+    _target_: src.transforms.transforms.Framing
+    window_secs: 96
+    n_mels: 64
+  specgram_params:
+    # fft hparams
+    sr: 16_000
+    hop_length: 160
+    n_fft: 512
+    y_axis: "mel"
+    x_axis: "time"
+    fmax: 125.0
+    fmin: 7500.0
+    cmap: "viridis"
+  reconstruct_step: 40
+  perc_recon: 0.25

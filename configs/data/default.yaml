@@ -1,0 +1,23 @@
+_target_: src.data.datamodule.EcoacousticsDataModuleExt
+root: ${paths.data_dir}
+segment_len: 57.60
+test_prop: 0.2
+val_prop: 0.2
+train_batch_size: 16
+# eval_batch_size: 2
+#train_val_test_split: [2830, 940, 940]
+num_workers: 8
+pin_memory: False
+target_attrs: ['NN', 'N0', 'habitat', 'site']
+apply_split: False
+sample_rate: 16000
+seed: 12345
+specgram_params:
+  win_length: 400
+  hop_length: 160
+  n_fft: 512
+  f_max: 7500.0
+  f_min: 125.0
+  n_mels: 64
+  log_offset: 0.001
+

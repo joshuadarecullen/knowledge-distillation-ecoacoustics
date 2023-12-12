@@ -1,0 +1,26 @@
+defaults:
+  - model_checkpoint.yaml
+  - early_stopping.yaml
+  - model_summary.yaml
+  - rich_progress_bar.yaml
+  - umap_latent.yaml
+  - mlp_metrics.yaml
+  - _self_
+
+model_checkpoint:
+  dirpath: ${paths.output_dir}/checkpoints
+  filename: "epoch_{epoch:03d}"
+  monitor: "val/f1_score"
+  mode: "max"
+  save_last: True
+  auto_insert_metric_name: False
+  every_n_epochs: 1 # number of epochs between checkpoints
+
+early_stopping:
+  # monitor: "val/f1_score/habitat"
+  monitor: "val/f1_score"
+  patience: 10
+  mode: "max"
+
+model_summary:
+  max_depth: -1

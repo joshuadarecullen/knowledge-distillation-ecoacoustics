@@ -1,0 +1,4 @@
+_target_: src.optimisers.cyclic_annealing.CyclicBatchAnnealer
+cycle_length: 3840
+max_value: 1.0
+warmup_batches: 768 # 4 epochs when batch size 16

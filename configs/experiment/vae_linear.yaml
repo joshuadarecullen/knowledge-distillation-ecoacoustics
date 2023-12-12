@@ -1,0 +1,78 @@
+# @package _global_
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /data: equal_split.yaml
+  - override /model: VAEModule.yaml
+  - override /callbacks: default.yaml
+  - override /trainer: gpu.yaml
+  - override /logger: wandb.yaml # set logger here or use command line (e.g. `python train.py logger=tensorboard`)
+  - override /paths: default.yaml
+  - override /extras: default.yaml
+  - override /hydra: default.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+# task name, determines output directory path
+task_name: "train_vae_linear"
+
+tags: ["dev", "Sussex Dataset", "VAE"]
+
+# set False to skip model training
+train: False
+
+# evaluate on test set, using best model weights achieved during training
+# lightning chooses best weights based on the metric specified in checkpoint callback
+predict: True
+
+# compile model for faster training with pytorch 2.0
+compile: False
+
+# simply provide checkpoint path to resume training
+ckpt_path: ${paths.log_dir}train_vae_linear/runs/2023-08-20_07-46-14_30464/checkpoints/epoch_044.ckpt
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 30464
+
+data:
+  seed: ${seed}
+
+trainer:
+  min_epochs: 1
+  max_epochs: 100
+  # gradient_clip_val: 0.5
+  fast_dev_run: False
+
+model:
+  model:
+    encoder:
+      vggish_pretrain: True
+      # feature_layers: [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M']
+    decoder:
+      out_channels: 2
+  optimizer:
+    lr: 0.0001
+  train_sigma: True
+  kl_scheduler:
+    _target_: src.optimisers.linear_annealing.BatchLinearAnnealer
+    max_value: 1.0
+    total_batches: 12500 # 100 epochs
+    warmup_batches: 608 # 4 epochs when batch size 16
+
+logger:
+  wandb:
+    tags: ${tags}
+    group: "VAE linear annealer"
+  aim:
+    experiment: "ECOACOUSTICS LINEAR ANNLEAER VAE "
+
+hydra:
+  run:
+    dir: ${paths.log_dir}/${task_name}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
+
+callbacks:
+  umap_latent:
+    seed: ${seed}
+    save_path: ${paths.log_dir}/${task_name}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}

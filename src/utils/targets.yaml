@@ -1,0 +1,22 @@
+habitat:
+  num_classes: 6
+  type: categorical
+  index: 0
+  full_name: Habitat
+site:
+  num_classes: 90
+  type: categorical
+  index: 1
+  full_name: Recorder Site
+time:
+  type: continuous
+  index: 2
+  full_name: Time around Dawn
+NN:
+  type: continuous
+  index: 3
+  full_name: Species Abundance
+N0:
+  type: continuous
+  index: 4
+  full_name: Species Richness

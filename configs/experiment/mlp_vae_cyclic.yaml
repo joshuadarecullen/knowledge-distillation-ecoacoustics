@@ -1,0 +1,71 @@
+
+# @package _global_
+# to execute this experiment run:
+# python train.py experiment=mlp_vae_cyclic
+
+defaults:
+  - override /data: equal_split.yaml
+  - override /model: MLPVAEModule.yaml
+  - override /callbacks: mlp.yaml
+  - override /trainer: gpu.yaml
+  - override /logger: wandb.yaml # set logger here or use command line (e.g. `python train.py logger=tensorboard`)
+  - override /paths: default.yaml
+  - override /extras: default.yaml
+  - override /hydra: default.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+# task name, determines output directory path
+task_name: "multitask_mlp_vae_large"
+
+tags: ["dev", "Sussex Dataset", "MLP", "VAE", "Teacher"]
+
+# set False to skip model training
+train: True
+
+# evaluate on test set, using best model weights achieved during training
+# lightning chooses best weights based on the metric specified in checkpoint callback
+predict: True
+
+# compile model for faster training with pytorch 2.0
+compile: False
+
+# simply provide checkpoint path to resume training
+ckpt_path: Null #${paths.log_dir}multitask_mlp_vae_large/runs/2023-08-28_19-31-41_89023/checkpoints/epoch_075.ckpt
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 89023
+
+model:
+  embedder_ckpt: Null #${paths.log_dir}train_vae_cyclic/runs/2023-08-19_20-45-27_89023/checkpoints/epoch_045.ckpt
+  embedder: 'VGGish'
+
+data:
+  seed: ${seed}
+
+trainer:
+  min_epochs: 15
+  max_epochs: 150
+  # gradient_clip_val: 0.5
+  fast_dev_run: False
+
+logger:
+  wandb:
+    tags: ${tags}
+    group: "MultiTask MLP VAE"
+  aim:
+    experiment: "ECOACOUSTICS SIGMA VAE CYCLIC"
+
+callbacks:
+  model_checkpoint:
+    monitor: "val/f1_score"
+    mode: "max"
+  early_stopping:
+    monitor: "val/loss"
+    patience: 10
+    mode: "min"
+
+hydra:
+  run:
+    dir: ${paths.log_dir}/${task_name}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}_${seed}
