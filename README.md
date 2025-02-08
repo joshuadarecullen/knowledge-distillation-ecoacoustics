@@ -1,6 +1,6 @@
 <div align="center">
 
-# A novel VAE compression architecure, with addtional distilled model.
+# A novel VAE compression architecure, with additional distilled model.
 
 </div>
 
