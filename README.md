@@ -1,6 +1,6 @@
 <div align="center">
 
-# A novel VAE compression architecure, with additional distilled model.
+# A novel VAE compression architecure, with an additional distilled EfficientNet model.
 
 </div>
 
