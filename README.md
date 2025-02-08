@@ -1,6 +1,6 @@
 <div align="center">
 
-# Compression of HSI with a Pyramid VAE
+# A novel VAE compression architecure, with addtional distilled model.
 
 </div>
 
@@ -8,11 +8,11 @@
 
 ## 📌  Introduction
 
-Master Dissertation Thesis (81\%)
-    - This project utilises [Ecoacoustic data](https://zenodo.org/records/1255218).
-    - The WAV files are preprocessed into a Mel-spectrogram.
-    - A novel VAE architecture.
-    - Distillation of VAE encoder into EfficientNet for deployment on edge devices.
+Master Dissertation Thesis (81\%):
+- This project utilises [Ecoacoustic data](https://zenodo.org/records/1255218).
+- The WAV files are preprocessed into a Mel-spectrogram.
+- A novel VAE architecture.
+- Distillation of VAE encoder into EfficientNet for deployment on edge devices.
 
 <br>
 
